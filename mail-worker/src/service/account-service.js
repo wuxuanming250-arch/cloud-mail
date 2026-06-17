@@ -12,6 +12,7 @@ import turnstileService from './turnstile-service';
 import roleService from './role-service';
 import { t } from '../i18n/i18n';
 import verifyRecordService from './verify-record-service';
+import cloudflareEmailRoutingService from './cloudflare-email-routing-service';
 
 const accountService = {
 
@@ -87,6 +88,8 @@ const accountService = {
 			}
 		}
 
+
+		await cloudflareEmailRoutingService.ensureRuleForEmail(c, email);
 
 		accountRow = await orm(c).insert(account).values({ email: email, userId: userId, name: emailUtils.getName(email) }).returning().get();
 

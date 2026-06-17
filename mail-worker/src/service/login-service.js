@@ -19,6 +19,7 @@ import dayjs from 'dayjs';
 import { toUtc } from '../utils/date-uitil';
 import { t } from '../i18n/i18n.js';
 import verifyRecordService from './verify-record-service';
+import cloudflareEmailRoutingService from './cloudflare-email-routing-service';
 
 const loginService = {
 
@@ -127,6 +128,8 @@ const loginService = {
 		}
 
 		const { salt, hash } = await saltHashUtils.hashPassword(password);
+
+		await cloudflareEmailRoutingService.ensureRuleForEmail(c, email);
 
 		const userId = await userService.insert(c, { email, regKeyId,password: hash, salt, type: type || defType });
 
